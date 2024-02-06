@@ -7,7 +7,6 @@ import a77777_888.me.t.shoptestapp.model.User
 import a77777_888.me.t.shoptestapp.ui.entities.SnackbarManager
 import a77777_888.me.t.shoptestapp.ui.entities.SnackbarMessage.Companion.toSnackbarMessage
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -53,11 +52,6 @@ class MainViewModel : ViewModel() {
 
     fun initCurrentUserRepository(context: Context, user: User) {
         currentUserRepository = CurrentUserRepository(context, user)
-        viewModelScope.launch{
-            currentUser?.favoritesFlow?.collect{
-                Log.e("TAG", "initCurrentUserRepository: favorites $it")
-            }
-        }
     }
 
     fun getItemById(id: String): Item? = dataStateFlow.value.data?.firstOrNull{ it.id == id }
@@ -92,7 +86,6 @@ class MainViewModel : ViewModel() {
             },
             block = block
         )
-
 }
 
 data class DataState(

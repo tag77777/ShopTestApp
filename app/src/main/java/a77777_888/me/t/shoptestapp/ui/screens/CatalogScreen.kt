@@ -233,6 +233,7 @@ fun ItemScreen(
             ) {
                 MyPager(
                     modifier = Modifier.fillMaxSize(0.9f),        //.height(IntrinsicSize.Max),
+                    list = item.images,
                     indicatorColor = MaterialTheme.colorScheme.primary,
                     indicatorHeight = 4.dp,
                     imageContentScale = ContentScale.Fit

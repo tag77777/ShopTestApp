@@ -49,7 +49,7 @@ fun MyPager(
                 modifier = Modifier
                     .fillMaxSize().align(Alignment.Center),
 //                    .padding(16.dp),
-                    painter = painterResource(id = images[page]),
+                    painter = painterResource(id = list[page]),
                     contentDescription = null,
                     contentScale = imageContentScale,
                 )

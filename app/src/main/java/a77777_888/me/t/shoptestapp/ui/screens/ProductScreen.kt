@@ -67,6 +67,7 @@ fun ProductScreen(
         ) {
             Box(modifier = Modifier.wrapContentSize()) {
                 MyPager(
+                    list = item.images,
                     indicatorColor = MaterialTheme.colorScheme.primary
                 )
 
