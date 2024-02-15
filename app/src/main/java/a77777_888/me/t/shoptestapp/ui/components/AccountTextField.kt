@@ -1,7 +1,6 @@
 package a77777_888.me.t.shoptestapp.ui.components
 
 import a77777_888.me.t.shoptestapp.R
-import a77777_888.me.t.shoptestapp.ui.entities.Validator
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -69,4 +68,14 @@ fun AccountTextField(
         }
 
     )
+}
+
+class Validator {
+    companion object {
+        private val namePattern = "[А-Яа-я]+".toRegex()
+
+        fun validateName(name: String): Boolean {
+            return namePattern.matches(name)
+        }
+    }
 }

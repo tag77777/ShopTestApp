@@ -8,9 +8,10 @@ import a77777_888.me.t.shoptestapp.ui.components.AccountTextField
 import a77777_888.me.t.shoptestapp.ui.components.ErrorMessage
 import a77777_888.me.t.shoptestapp.ui.components.LoadingMessage
 import a77777_888.me.t.shoptestapp.ui.components.PhoneField
+import a77777_888.me.t.shoptestapp.ui.components.Validator
+import a77777_888.me.t.shoptestapp.ui.components.isPhoneValid
 import a77777_888.me.t.shoptestapp.ui.entities.CATALOG_SCREEN
 import a77777_888.me.t.shoptestapp.ui.entities.MAIN_SCREEN
-import a77777_888.me.t.shoptestapp.ui.entities.Validator
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,10 +20,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,12 +40,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
 import kotlinx.coroutines.flow.Flow
 
 
@@ -96,25 +103,34 @@ fun RegistrationScreen(
                     PhoneField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .onFocusChanged {
-                                when {
-                                    phone.isBlank() && it.hasFocus -> {
-                                        phone = "7"
-                                    }
-
-                                    phone.length == 1 && !it.hasFocus -> phone = ""
-                                    else -> {}
-                                }
-                            },
+                            .padding(horizontal = 16.dp),
                         phone = phone,
-                        isValid = phone.length == 11,
-                        onPhoneChanged = {
-                            if (it.isDigitsOnly() && it.length <= 11) {
-                                phone = it
-                            }
+                        onPhoneChanged = { phone = it },
+                        placeholder = {
+                            Text(
+                                text = stringResource(R.string.phone),
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
                         },
-                        clear = { phone = "7" }
+                        trailingIcon = {
+                            if (phone.length > 1)
+                                IconButton(
+                                    onClick = { phone = "" },
+                                    modifier = Modifier.size(28.dp),
+                                    colors = IconButtonDefaults.iconButtonColors(
+                                        contentColor = MaterialTheme.colorScheme.onSurface
+                                    )
+                                ) {
+                                    Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                                }
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            errorIndicatorColor = if (phone.isEmpty()) Color.Transparent else MaterialTheme.colorScheme.error,
+                            errorCursorColor = if (phone.isEmpty()) Color.Transparent else MaterialTheme.colorScheme.error,
+                            cursorColor = Color.Transparent
+                        ),
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -125,7 +141,7 @@ fun RegistrationScreen(
                             initCurrentUserRepository(context, user)
                             getRemoteData()
                         },
-                        enabled = Validator.validateName(name) && Validator.validateName(surname) && phone.length == 11,
+                        enabled = Validator.validateName(name) && Validator.validateName(surname) && phone.isPhoneValid(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
